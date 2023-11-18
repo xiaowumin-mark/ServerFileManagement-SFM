@@ -27,6 +27,7 @@ func main() {
 		c.JSON(200, chief.GetHostState())
 
 	})
+
 	r.Run(":8080")
 
 }
