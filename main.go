@@ -13,13 +13,19 @@ func main() {
 	fmt.Println()
 	r := gin.Default()
 	Setting := r.Group("config/")
-	Setting.GET("/disk", func(c *gin.Context) {
+	Setting.POST("/disk", func(c *gin.Context) {
 		decodedPerson, err := ToJson.ConfJson(chief.Config())
 		if err != nil {
-			fmt.Println("Error decoding person:", err)
+			fmt.Println("解码错误:", err)
 			return
 		}
 		c.JSON(200, decodedPerson)
+	})
+
+	Setting.POST("/state", func(c *gin.Context) {
+
+		c.JSON(200, chief.GetHostState())
+
 	})
 	r.Run(":8080")
 
