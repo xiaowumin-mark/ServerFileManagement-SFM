@@ -16,3 +16,14 @@ func ConfJson(jsonData []byte) (*Struct.Config, error) {
 
 	return &person, nil
 }
+
+func GetFileJson(jsonData []byte) (*Struct.GetFile, error) {
+	var person Struct.GetFile
+	err := json.Unmarshal(jsonData, &person)
+	if err != nil {
+		fmt.Println("JSON decoding error:", err)
+		return nil, err
+	}
+
+	return &person, nil
+}
