@@ -29,14 +29,14 @@ func main() {
 	})
 	File_.POST("/", func(c *gin.Context) {
 		path := c.PostForm("path")
-		fmt.Println(path)
+		
 		decodedPerson, err := ToJson.GetFileJson(File.GetFile(path))
 		if err != nil {
 			fmt.Println("解码错误:", err)
 			return
 		}
 		c.JSON(200, decodedPerson)
-
+		fmt.Println(path)
 	})
 	r.Run(":8080")
 
