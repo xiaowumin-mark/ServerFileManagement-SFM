@@ -9,3 +9,8 @@ type Config struct {
 		Use     []string `json:"Use"`     // 已使用空间
 	} `json:"Disks"`
 }
+
+type HostState struct {
+	CpuUse    int `json:"CpuUse"`
+	MemoryUse int `json:"MemoryUse"`
+}

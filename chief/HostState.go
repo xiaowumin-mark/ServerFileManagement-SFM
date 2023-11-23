@@ -1,18 +1,29 @@
 package chief
 
 import (
+	"encoding/json"
 	"fmt"
 	"os/exec"
 	"strconv"
 	"strings"
+	"xiaowumin-SFM/Struct"
 
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
-func GetHostState() []int { // 获取服务器硬件使用状态
-	var HostStateData []int
-	HostStateData = append(HostStateData, getCPUUsage(), getUsedPercent())
-	return HostStateData
+func GetHostState() []byte { // 获取服务器硬件使用状态
+	//var HostStateData []int
+	//HostStateData = append(HostStateData, getCPUUsage(), getUsedPercent())
+	hoststate := Struct.HostState{
+		CpuUse:    getCPUUsage(),
+		MemoryUse: getUsedPercent(),
+	}
+	jsonData, err := json.Marshal(hoststate)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return jsonData
 }
 
 func getCPUUsage() int { // 获取服务器的处理器占用
