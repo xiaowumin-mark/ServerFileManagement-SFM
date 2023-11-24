@@ -11,6 +11,9 @@ import (
 var gf = Struct.GetFile{} // 将gf的定义移出函数之外，使其成为全局变量
 
 func GetFile(dirname string) []byte {
+	if dirname[len(dirname)-1] != '/' {
+		dirname += "/"
+	}
 	// 在每次调用GetFile之前将gf重置为初始状态
 	gf = Struct.GetFile{}
 
@@ -20,7 +23,8 @@ func GetFile(dirname string) []byte {
 		fmt.Println("读取目录失败:", err)
 		return nil
 	}
-
+	var GetFilenum int
+	GetFilenum = 0
 	for _, entry := range entries {
 		fileInfo, err := entry.Info()
 		if err != nil {
@@ -41,16 +45,19 @@ func GetFile(dirname string) []byte {
 			Name  string `json:"name"`
 			Size  string `json:"size"`
 			Time  string `json:"time"`
+			Path  string `json:"path"`
 		}{
 			Isdir: fileInfo.IsDir(),
 			Name:  entry.Name(),
 			Size:  formatFileSize(fileInfo.Size()),
 			Time:  FileTime_,
+			Path:  dirname + entry.Name(),
 		}
-
+		GetFilenum++
 		gf.Main = append(gf.Main, newEntry)
 	}
-
+	gf.Number = GetFilenum
+	gf.Path = dirname
 	jsonData, err := json.Marshal(gf)
 	if err != nil {
 		fmt.Println(err)

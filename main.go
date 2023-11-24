@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"xiaowumin-SFM/chief"
 	"xiaowumin-SFM/chief/File"
 	"xiaowumin-SFM/chief/ToJson"
@@ -49,12 +48,8 @@ func main() {
 		path := c.PostForm("path")
 		keyword := c.PostForm("keyword")
 		Type := c.PostForm("type")
-		b, err := strconv.ParseBool(Type)
-		if err != nil {
-			fmt.Println("无法将字符串转换为布尔值:", err)
-			return
-		}
-		decodedPerson, err := ToJson.SearchFileJson(File.SearchFile(path, keyword, b))
+
+		decodedPerson, err := ToJson.SearchFileJson(File.SearchFile(path, keyword, Type))
 		if err != nil {
 			fmt.Println("解码错误:", err)
 			return
@@ -70,6 +65,49 @@ func main() {
 	//	//fmt.Println(path)
 	//})
 
+	Setting.GET("/disk", func(c *gin.Context) {
+		decodedPerson, err := ToJson.ConfJson(chief.Config())
+		if err != nil {
+			fmt.Println("解码错误:", err)
+			return
+		}
+		c.JSON(200, decodedPerson)
+	})
+
+	Setting.GET("/state", func(c *gin.Context) {
+		decodedPerson, err := ToJson.HostStateJson(chief.GetHostState())
+		if err != nil {
+			fmt.Println("解码错误:", err)
+			return
+		}
+		c.JSON(200, decodedPerson)
+
+	})
+	File_.GET("/", func(c *gin.Context) {
+		path := c.Query("path")
+
+		decodedPerson, err := ToJson.GetFileJson(File.GetFile(path))
+		if err != nil {
+			fmt.Println("解码错误:", err)
+			return
+		}
+		c.JSON(200, decodedPerson)
+		//fmt.Println(path)
+	})
+
+	File_.GET("/SearchFile", func(c *gin.Context) {
+		path := c.Query("path")
+		keyword := c.Query("keyword")
+		Type := c.Query("type")
+
+		decodedPerson, err := ToJson.SearchFileJson(File.SearchFile(path, keyword, Type))
+		if err != nil {
+			fmt.Println("解码错误:", err)
+			return
+		}
+		c.JSON(200, decodedPerson)
+		//fmt.Println(path)
+	})
 	r.Run(":8080")
 
 }
