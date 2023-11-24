@@ -25,3 +25,12 @@ type SearchFile struct {
 		Path  string `json:"path"`
 	} `json:"main"`
 }
+
+type SandRemoveFile struct {
+	Path       string `json:"path"`
+	RemoveName []struct {
+		Isdir bool   `json:"isdir"`
+		Name  string `json:"name"`
+	} `json:"removename"`
+	User `json:"user"`
+}

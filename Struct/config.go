@@ -14,3 +14,9 @@ type HostState struct {
 	CpuUse    int `json:"CpuUse"`
 	MemoryUse int `json:"MemoryUse"`
 }
+
+type User struct {
+	UserName string `json:"username"`
+	PassWord string `json:"password"`
+	KeyWord  string `json:"keyword"`
+}

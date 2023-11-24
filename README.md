@@ -1,5 +1,7 @@
 ## 服务器文件管理系统 (开发中，目前仅支持win server)
 
+[API文档](https://github.com/xiaowumin-mark/ServerFileManagement-SFM/blob/main/框架.md)
+
 #### 使用编程语言及框架
 1. 编程语言：goland
 2. 开发框架：

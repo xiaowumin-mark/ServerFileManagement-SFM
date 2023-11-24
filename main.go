@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"xiaowumin-SFM/Struct"
 	"xiaowumin-SFM/chief"
 	"xiaowumin-SFM/chief/File"
 	"xiaowumin-SFM/chief/ToJson"
@@ -56,6 +57,21 @@ func main() {
 		}
 		c.JSON(200, decodedPerson)
 		//fmt.Println(path)
+	})
+	File_.POST("/RemoveFile", func(c *gin.Context) {
+		var RemoveFilest = Struct.SandRemoveFile{}
+		if err := c.BindJSON(&RemoveFilest); err == nil {
+		}
+		if err := File.RemoveFile(RemoveFilest); err != nil {
+			c.JSON(200, gin.H{
+				"main": "ok",
+			})
+		} else {
+			c.JSON(200, gin.H{
+				"main": "err",
+			})
+		}
+
 	})
 
 	r.Run(":8080")
