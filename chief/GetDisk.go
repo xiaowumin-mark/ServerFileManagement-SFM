@@ -1,7 +1,6 @@
 package chief
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"syscall"
@@ -65,10 +64,11 @@ func getDiskUsage() ([]DiskUsage, error) {
 	return diskUsages, nil
 }
 
-func Config() []byte {
+func Config() (*Struct.Config, error) {
 	diskUsages, err := getDiskUsage()
 	if err != nil {
 		fmt.Println("检索磁盘使用率失败:", err)
+		return nil, err
 	}
 
 	var DiskAll []string
@@ -99,12 +99,7 @@ func Config() []byte {
 	}
 	// 打印JSON字符串
 	// 将结构体转换为JSON字符串
-	jsonData, err := json.Marshal(fwqc)
-	if err != nil {
-		fmt.Println("转换为JSON时出错:", err)
-
-	}
 
 	// 返回JSON
-	return jsonData
+	return &fwqc, nil
 }

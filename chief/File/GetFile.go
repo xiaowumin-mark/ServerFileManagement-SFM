@@ -1,7 +1,7 @@
 package File
 
 import (
-	"encoding/json"
+	//"encoding/json"
 	"fmt"
 	"os"
 	"time"
@@ -10,7 +10,7 @@ import (
 
 var gf = Struct.GetFile{} // 将gf的定义移出函数之外，使其成为全局变量
 
-func GetFile(dirname string) []byte {
+func GetFile(dirname string) (*Struct.GetFile, error) {
 	if dirname[len(dirname)-1] != '/' {
 		dirname += "/"
 	}
@@ -21,7 +21,7 @@ func GetFile(dirname string) []byte {
 	entries, err := os.ReadDir(dirname)
 	if err != nil {
 		fmt.Println("读取目录失败:", err)
-		return nil
+		return nil, err
 	}
 	var GetFilenum int
 	GetFilenum = 0
@@ -58,13 +58,13 @@ func GetFile(dirname string) []byte {
 	}
 	gf.Number = GetFilenum
 	gf.Path = dirname
-	jsonData, err := json.Marshal(gf)
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
+	//jsonData, err := json.Marshal(gf)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return nil
+	//}
 	//fmt.Println(string(jsonData))
-	return jsonData
+	return &gf, nil
 }
 
 func formatFileSize(fileSize int64) (size string) {

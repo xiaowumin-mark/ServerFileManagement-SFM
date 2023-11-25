@@ -1,7 +1,6 @@
 package File
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,12 +8,11 @@ import (
 	"time"
 	"xiaowumin-SFM/Struct"
 	"xiaowumin-SFM/chief"
-	"xiaowumin-SFM/chief/ToJson"
 )
 
-func SearchFile(path string, name string, all string) []byte {
+func SearchFile(path string, name string, all string) (*Struct.SearchFile, error) {
 	var sf = Struct.SearchFile{}
-	var jsonData []byte
+
 	if path[len(path)-1] != '/' {
 		path += "/"
 	}
@@ -22,7 +20,7 @@ func SearchFile(path string, name string, all string) []byte {
 		entries, err := os.ReadDir(path)
 		if err != nil {
 			fmt.Println("读取目录失败:", err)
-
+			return nil, err
 		}
 		var SearchFilenum int
 		SearchFilenum = 0
@@ -35,7 +33,7 @@ func SearchFile(path string, name string, all string) []byte {
 				fileInfo, err := entry.Info()
 				if err != nil {
 					fmt.Println("无法获取文件信息:", err)
-
+					return nil, err
 				}
 
 				modTime := fileInfo.ModTime()
@@ -68,19 +66,15 @@ func SearchFile(path string, name string, all string) []byte {
 		sf.Path = path
 		sf.Type = all
 		sf.Number = SearchFilenum
-		jsonData, err = json.Marshal(sf)
-		if err != nil {
-			fmt.Println(err)
 
-		}
 		//fmt.Println(string(jsonData))
 
 	} else if all == "All" {
 		if path == "" {
-			decodedPerson, err := ToJson.ConfJson(chief.Config())
+			decodedPerson, err := chief.Config()
 			if err != nil {
 				fmt.Println("解码错误:", err)
-
+				return nil, err
 			}
 			var SearchFilenum int
 			SearchFilenum = 0
@@ -138,12 +132,6 @@ func SearchFile(path string, name string, all string) []byte {
 			sf.Path = path
 			sf.Type = all
 			sf.Number = SearchFilenum
-			jsonData, err = json.Marshal(sf)
-			if err != nil {
-				fmt.Println(err)
-
-			}
-			//fmt.Println(string(jsonData))
 		} else {
 
 			root := path // 替换为你要遍历的目录的路径
@@ -191,20 +179,17 @@ func SearchFile(path string, name string, all string) []byte {
 			})
 			if err != nil {
 				fmt.Println(err)
+				return nil, err
 			}
 
 			sf.KeyWord = name
 			sf.Path = path
 			sf.Type = all
 			sf.Number = SearchFilenum
-			jsonData, err = json.Marshal(sf)
-			if err != nil {
-				fmt.Println(err)
 
-			}
 			//fmt.Println(string(jsonData))
 		}
 
 	}
-	return jsonData
+	return &sf, nil
 }
